@@ -25,6 +25,16 @@ func Routes() *echo.Echo {
 		memberRouter.DELETE("/delete/:id", memberHandler.Delete)
 	}
 
+	productRepository := repositories.NewProductRepository(db)
+	productService := services.NewProductService(productRepository)
+	productHandler := handlers.NewProductHandler(productService)
+	productRouter := r.Group("/products")
+
+	{
+		productRouter.GET("", productHandler.Products)
+		productRouter.POST("/register", productHandler.Create)
+	}
+
 	r.Start(":9000")
 
 	return r
