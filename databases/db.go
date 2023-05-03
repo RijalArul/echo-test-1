@@ -37,7 +37,7 @@ func StartDB() {
 		panic(err)
 	}
 
-	DB.AutoMigrate(&entities.Member{}, &entities.Product{})
+	DB.AutoMigrate(&entities.Member{}, &entities.Product{}, &entities.ReviewProduct{})
 
 }
 

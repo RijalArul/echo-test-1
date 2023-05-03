@@ -35,6 +35,15 @@ func Routes() *echo.Echo {
 		productRouter.POST("/register", productHandler.Create)
 	}
 
+	reviewRepository := repositories.NewReviewProductRepository(db)
+	reviewService := services.NewReviewProductService(reviewRepository)
+	reviewHandler := handlers.NewReviewProductHandler(reviewService)
+	reviewRouter := r.Group("/reviews")
+
+	{
+		reviewRouter.POST("/create/:product_id", reviewHandler.Create)
+	}
+
 	r.Start(":9000")
 
 	return r
