@@ -12,6 +12,7 @@ type Member struct {
 	SkinType       string          `gorm:"not null" valid:"required~Your Skin Type is required"`
 	SkinColor      string          `gorm:"not null" valid:"required~Your Skin Color is required"`
 	ReviewProducts []ReviewProduct `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	LikeReview     []LikeReview    `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 func (m *Member) BeforeCreate(tx *gorm.DB) (err error) {

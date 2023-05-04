@@ -9,7 +9,8 @@ type ReviewProduct struct {
 	GormModel
 	MemberID   uint
 	ProductID  uint
-	DescReview string `gorm:"type:text" valid:"required~Your Desc Review is required"`
+	DescReview string       `gorm:"type:text" valid:"required~Your Desc Review is required"`
+	LikeReview []LikeReview `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	Member     *Member
 	Product    *Product
 }

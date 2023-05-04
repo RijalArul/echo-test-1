@@ -11,6 +11,7 @@ import (
 
 type ReviewProductHandler interface {
 	Create(c echo.Context) error
+	Reviews(c echo.Context) error
 }
 
 type ReviewProductHandlerImpl struct {
@@ -40,4 +41,17 @@ func (h *ReviewProductHandlerImpl) Create(c echo.Context) error {
 	}
 
 	return RespSuccess(c, http.StatusCreated, newReview)
+}
+
+func (h *ReviewProductHandlerImpl) Reviews(c echo.Context) error {
+	productID := c.Param("product_id")
+	parseProductID, _ := strconv.ParseUint(productID, 10, 32)
+
+	reviewsProduct, err := h.reviewProductService.ReviewsProduct(uint(parseProductID))
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, false)
+	}
+
+	return RespSuccess(c, http.StatusOK, reviewsProduct)
 }

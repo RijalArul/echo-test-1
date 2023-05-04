@@ -8,6 +8,7 @@ import (
 
 type ReviewProductService interface {
 	CreateReview(reviewDTO webs.ReviewProductDTO, memberID uint, productID uint) (webs.ReviewProductResp, error)
+	ReviewsProduct(productID uint) ([]webs.ReviewProductResp, error)
 }
 
 type ReviewProductServiceImpl struct {
@@ -37,4 +38,17 @@ func (s *ReviewProductServiceImpl) CreateReview(reviewDTO webs.ReviewProductDTO,
 	newReviewResp := convertBodyReviewResp(*newReview)
 
 	return newReviewResp, err
+}
+
+func (s *ReviewProductServiceImpl) ReviewsProduct(productID uint) ([]webs.ReviewProductResp, error) {
+	reviews, err := s.reviewProductRepository.ReviewsProduct(productID)
+
+	reviewsResp := []webs.ReviewProductResp{}
+
+	for i := 0; i < len(reviews); i++ {
+		reviewsBody := convertBodyReviewResp(reviews[i])
+		reviewsResp = append(reviewsResp, reviewsBody)
+	}
+
+	return reviewsResp, err
 }
