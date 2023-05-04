@@ -33,6 +33,7 @@ func Routes() *echo.Echo {
 	{
 		productRouter.GET("", productHandler.Products)
 		productRouter.POST("/register", productHandler.Create)
+		productRouter.GET("/:product_id", productHandler.Detail)
 	}
 
 	reviewRepository := repositories.NewReviewProductRepository(db)

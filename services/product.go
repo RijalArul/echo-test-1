@@ -9,6 +9,7 @@ import (
 type ProductService interface {
 	GetAllProducts() ([]webs.ProductResponse, error)
 	CreateProduct(productDTO webs.ProductDTO) (webs.ProductResponse, error)
+	DetailProduct(id uint) (webs.ProductReviewResponse, error)
 }
 
 type ProductServiceImpl struct {
@@ -24,6 +25,17 @@ func convertBodyProductResp(product entities.Product) webs.ProductResponse {
 		ID:          product.ID,
 		NameProduct: product.NameProduct,
 		Price:       product.Price,
+	}
+}
+
+func convertBodyProductReviewResp(product entities.Product, reviewProduct entities.ReviewProduct, membersLike []entities.Member, countLike int) webs.ProductReviewResponse {
+	return webs.ProductReviewResponse{
+		ID:            product.ID,
+		NameProduct:   product.NameProduct,
+		Price:         product.Price,
+		ReviewProduct: reviewProduct,
+		Member:        membersLike,
+		CountLike:     countLike,
 	}
 }
 
@@ -48,4 +60,10 @@ func (s *ProductServiceImpl) CreateProduct(productDTO webs.ProductDTO) (webs.Pro
 	newProduct, err := s.productRepository.CreateProduct(products)
 	ProductResp := convertBodyProductResp(*newProduct)
 	return ProductResp, err
+}
+
+func (s *ProductServiceImpl) DetailProduct(id uint) (webs.ProductReviewResponse, error) {
+	product, reviewProduct, membersLike, countLike, err := s.productRepository.DetailProduct(id)
+	productResp := convertBodyProductReviewResp(*product, *reviewProduct, membersLike, countLike)
+	return productResp, err
 }
